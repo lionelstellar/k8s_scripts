@@ -1,3 +1,17 @@
+# 查看需要的镜像:
+# kubeadm config images list  
+#
+# root@master:~/k8s_scripts# kubeadm config images list
+# k8s.gcr.io/kube-apiserver:v1.22.3
+# k8s.gcr.io/kube-controller-manager:v1.22.3
+# k8s.gcr.io/kube-scheduler:v1.22.3
+# k8s.gcr.io/kube-proxy:v1.22.3
+# k8s.gcr.io/pause:3.5
+# k8s.gcr.io/etcd:3.5.0-0
+# k8s.gcr.io/coredns/coredns:v1.8.4
+# 
+# 我的kubeadm版本是1.22.2, 不知道为什么这些镜像都是1.22.3, 我选择无视, pull 1.22.2版本
+
 set -o errexit
 set -o nounset
 set -o pipefail
@@ -22,7 +36,7 @@ kube-scheduler:${KUBE_VERSION}
 kube-controller-manager:${KUBE_VERSION}
 kube-apiserver:${KUBE_VERSION}
 pause:${KUBE_PAUSE_VERSION}
-#etcd:${ETCD_VERSION}
+etcd:${ETCD_VERSION}
 #coredns:${DNS_VERSION}
 )
 
@@ -33,22 +47,7 @@ for imageName in ${images[@]} ; do
   docker rmi $DOCKERHUB_URL/$imageName
 done
 
-## 这里只需要留下还需要下载的组件的版本号
-#ETCD_VERSION=3.4.3-0
-DNS_VERSION=1.8.4
-
-GCR_URL=k8s.gcr.io
-## 这里写新的仓库地址
-DOCKERHUB_URL=corelab
-
-## 这里也只留下需要下载的镜像
-images=(
-#etcd:${ETCD_VERSION}
-coredns:${DNS_VERSION}
-)
-
-for imageName in ${images[@]} ; do
-  docker pull $DOCKERHUB_URL/$imageName
-  docker tag $DOCKERHUB_URL/$imageName $GCR_URL/$imageName
-  docker rmi $DOCKERHUB_URL/$imageName
-done
+# DNS在其他仓库里
+docker pull coredns/coredns:$DNS_VERSION
+docker tag coredns/coredns:$DNS_VERSION k8s.gcr.io/coredns/coredns:v$DNS_VERSION
+docker rmi coredns/coredns:$DNS_VERSION

@@ -1,0 +1,15 @@
+deb https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ xenial main restricted universe multiverse
+deb-src https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ xenial main restricted universe multiverse
+deb https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ xenial-updates main restricted universe multiverse
+deb-src https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ xenial-updates main restricted universe multiverse
+deb https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ xenial-backports main restricted universe multiverse
+deb-src https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ xenial-backports main restricted universe multiverse
+deb https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ xenial-security main restricted universe multiverse
+deb-src https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ xenial-security main restricted universe multiverse
+deb https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ xenial-proposed main restricted universe multiverse
+deb-src https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ xenial-proposed main restricted universe multiverse
+deb http://cn.archive.ubuntu.com/ubuntu bionic main multiverse restricted universe
+deb http://cn.archive.ubuntu.com/ubuntu bionic-updates main multiverse restricted universe
+deb http://cn.archive.ubuntu.com/ubuntu bionic-security main multiverse restricted universe
+deb http://cn.archive.ubuntu.com/ubuntu bionic-proposed main multiverse restricted universe
+deb [arch=amd64] http://mirrors.aliyun.com/docker-ce/linux/ubuntu bionic stable

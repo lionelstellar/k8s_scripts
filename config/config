@@ -1,0 +1,9 @@
+# project info
+K8S_SCRIPTS_DIR=/root/k8s_scripts
+
+
+# node info
+master_num=1
+worker_num=1
+master_ip_list=(172.16.238.136)
+worker_ip_list=(172.16.238.138)
