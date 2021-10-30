@@ -2,7 +2,7 @@
 
 while read line;do  
     eval "$line"  
-done < ../config/config
+done < $K8S_SCRIPTS_DIR/config/config
 
 
 

@@ -1,3 +1,0 @@
-# k8s
-export K8S_SCRIPTS_DIR=/root/k8s_scripts
-export PATH=$K8S_SCRIPTS_DIR:$PATH
