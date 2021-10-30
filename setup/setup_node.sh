@@ -5,6 +5,8 @@ while read line;do
 done < ../config/config
 
 
+
+
 # 将当前的UTC时间写入硬件时钟
 timedatectl set-timezone Asia/Shanghai
 timedatectl set-local-rtc 0
@@ -32,7 +34,7 @@ sudo tee /etc/docker/daemon.json <<-'EOF'
          "max-size": "100m"
      },
      "storage-driver": "overlay2",
-     "registry-mirrors": ["[https://irnlfwui.mirror.aliyuncs.com](https://irnlfwui.mirror.aliyuncs.com/)"]
+     "registry-mirrors": ["https://irnlfwui.mirror.aliyuncs.com"]
 }
 EOF
 systemctl daemon-reload
@@ -56,4 +58,4 @@ EOF
 sudo apt-get update
 
 # apt-get install -y kubectl kubelet kubeadm
-sudo apt install -y kubelet=1.22.2 kubeadm=1.22.2 kubectl=1.22.2
+sudo apt install -y kubelet=1.22.3 kubeadm=1.22.3 kubectl=1.22.3

@@ -31,12 +31,7 @@ DOCKERHUB_URL=gotok8s
 ##这里是镜像列表，新版本要把coredns改成coredns/coredns
 images=(
 kube-proxy:${KUBE_VERSION}
-kube-scheduler:${KUBE_VERSION}
-kube-controller-manager:${KUBE_VERSION}
-kube-apiserver:${KUBE_VERSION}
 pause:${KUBE_PAUSE_VERSION}
-etcd:${ETCD_VERSION}
-#coredns:${DNS_VERSION}
 )
 
 ##这里是拉取和改名的循环语句
@@ -45,8 +40,3 @@ for imageName in ${images[@]} ; do
   docker tag $DOCKERHUB_URL/$imageName $GCR_URL/$imageName
   docker rmi $DOCKERHUB_URL/$imageName
 done
-
-# DNS在其他仓库里
-docker pull coredns/coredns:$DNS_VERSION
-docker tag coredns/coredns:$DNS_VERSION k8s.gcr.io/coredns/coredns:v$DNS_VERSION
-docker rmi coredns/coredns:$DNS_VERSION

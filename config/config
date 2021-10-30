@@ -1,9 +1,14 @@
 # project info
 K8S_SCRIPTS_DIR=/root/k8s_scripts
 
+# network
+LAN=192.168.0.0/16
+
+# k8s version
+K8S_VERSION=v1.22.2
 
 # node info
-master_num=1
-worker_num=1
-master_ip_list=(172.16.238.136)
-worker_ip_list=(172.16.238.138)
+MASTER_NUM=1
+WORKER_NUM=1
+MASTER_IP_LIST=(172.16.238.136)
+WORKER_IP_LIST=(172.16.238.138)

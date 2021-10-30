@@ -1,8 +1,0 @@
-#!/bin/bash
-
-while read line;do  
-    eval "$line"  
-done < ../config/config
-
-echo $K8S_SCRIPTS_DIR
-echo ${master_ip_list[0]}
