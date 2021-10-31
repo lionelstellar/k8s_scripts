@@ -15,7 +15,7 @@ mkdir -p $HOME/.kube
 sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
 sudo chown $(id -u):$(id -g) $HOME/.kube/config
 
-kubectl apply -f $K8S_SCRIPTS_DIR/kube-flannel.yml
+kubectl apply -f $K8S_SCRIPTS_DIR/host_configs/kube-flannel.yml
 
 # 生成不过期的token
 kubeadm token create --ttl 0 --print-join-command > $K8S_SCRIPTS_DIR/token/token
