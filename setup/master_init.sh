@@ -9,7 +9,7 @@ master_ip=${MASTER_IP_LIST[0]}
 echo "[*] master ip is"$master_ip
 
 
-kubeadm init --pod-network-cidr=$LAN --kubernetes-version=$K8S_VERSION --apiserver-advertise-address=master_ip
+kubeadm init --pod-network-cidr=$LAN --kubernetes-version=$K8S_VERSION --apiserver-advertise-address=$master_ip
 
 mkdir -p $HOME/.kube
 sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
