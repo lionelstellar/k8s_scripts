@@ -8,6 +8,7 @@ done < $K8S_SCRIPTS_DIR/config/config
 master_ip=${MASTER_IP_LIST[0]}
 echo "[*] master ip is"$master_ip
 
+rm $HOME/.kube/config
 
 kubeadm init --pod-network-cidr=$LAN --kubernetes-version=$K8S_VERSION --apiserver-advertise-address=$master_ip
 

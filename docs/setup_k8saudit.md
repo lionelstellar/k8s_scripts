@@ -1,3 +1,7 @@
+## enable apiserver
+`vi /etc/kubernetes/pki/audit-policy.yaml`
+
+```
 apiVersion: audit.k8s.io/v1 # This is required.
 kind: Policy
 # Don't generate audit events for all requests in RequestReceived stage.
@@ -66,3 +70,35 @@ rules:
     # generate an audit event in RequestReceived.
     omitStages:
       - "RequestReceived"
+```
+
+`vi /etc/kubernetes/manifests/kube-apiserver.yaml`
+
+```
+    - --audit-policy-file=/etc/kubernetes/pki/audit-policy.yaml
+    - --audit-log-path=/var/log/pods.audit
+    - --audit-log-maxage=7
+    - --audit-log-maxbackup=4
+    - --audit-log-maxsize=10
+
+    ...
+
+    volumeMounts:
+    - mountPath: /etc/kubernetes/pki/audit-policy.yaml
+        name: audit
+        readOnly: true
+    - mountPath: /var/log/pods.audit
+        name: audit-log
+        readOnly: false
+
+    ...
+
+  - hostPath:
+      path: /etc/kubernetes/pki/audit-policy.yaml
+      type: File
+    name: audit
+  - hostPath:
+      path: /var/log/pods.audit
+      type: FileOrCreate
+    name: audit-log
+```
