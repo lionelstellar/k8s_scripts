@@ -1,5 +1,11 @@
 ## enable apiserver
-`vi /etc/kubernetes/pki/audit-policy.yaml`
+使能k8s audit log作为falco的事件源，具体操作见https://kubernetes.io/docs/tasks/debug-application-cluster/audit/的Log backend部分
+
+自动化脚本:
+$K8S_SCRIPTS_DIR/setup/enable_audit.sh
+
+### step 1
+`vi /etc/kubernetes/pki/audit-policy.yaml   # 创建audit收集时间的策略文件`
 
 ```
 apiVersion: audit.k8s.io/v1 # This is required.
@@ -71,8 +77,8 @@ rules:
     omitStages:
       - "RequestReceived"
 ```
-
-`vi /etc/kubernetes/manifests/kube-apiserver.yaml`
+### step 2
+`vi /etc/kubernetes/manifests/kube-apiserver.yaml   # 修改apiserver的pod配置文件`
 
 ```
     - --audit-policy-file=/etc/kubernetes/pki/audit-policy.yaml
@@ -85,11 +91,11 @@ rules:
 
     volumeMounts:
     - mountPath: /etc/kubernetes/pki/audit-policy.yaml
-        name: audit
-        readOnly: true
+      name: audit
+      readOnly: true
     - mountPath: /var/log/pods.audit
-        name: audit-log
-        readOnly: false
+      name: audit-log
+      readOnly: false
 
     ...
 
@@ -102,3 +108,6 @@ rules:
       type: FileOrCreate
     name: audit-log
 ```
+
+### step 3
+`cat /var/log/pods.audit    #修改完后自动生效, 查看日志文件, 如果没有, 执行debug_kubelet.sh查看原因`
