@@ -1,11 +1,24 @@
-## enable apiserver
-使能k8s audit log作为falco的事件源，具体操作见https://kubernetes.io/docs/tasks/debug-application-cluster/audit/ 的Log backend部分
+## 开启k8s audit log
+参考链接：
+https://dev.bitolog.com/implement-audits-webhook/
+https://kubernetes.io/docs/tasks/debug-application-cluster/audit/
 
-自动化脚本:
-$K8S_SCRIPTS_DIR/setup/enable_audit.sh
+audit后端可以以日志方式写入文件系统，也可以以webhook的方式发送到server端。
 
-### step 1
-`vi /etc/kubernetes/pki/audit-policy.yaml   # 创建audit收集时间的策略文件`
+首先需要根据个人cluster情况修改host_config目录下的几个配置文件：
+
+[1. audit.yaml](../host_configs/audit.yaml ':include :type=code')
+将audit.yaml中的内容定制化修改后拷贝到/etc/kubernetes/pki/audit-policy.yaml 
+
+[2. kube-apiserver-log.yaml](../host_configs/kube-apiserver-log.yaml ':include :type=code')
+将kube-apiserver-log.yaml中的内容定制化修改后拷贝到/etc/kubernetes/pki/kube-apiserver.yaml 
+
+[3. kube-apiserver-webhook.yaml](../host_configs/kube-apiserver-webhook.yaml ':include :type=code')
+将kube-apiserver-webhook.yaml中的内容定制化修改后拷贝到/etc/kubernetes/pki/kube-apiserver.yaml 
+
+
+### step 1 设置事件收集策略 [audit.yaml](../host_configs/audit.yaml ':include :type=code')
+`vi /etc/kubernetes/pki/audit-policy.yaml   # 创建audit收集事件的策略文件`
 
 ```
 apiVersion: audit.k8s.io/v1 # This is required.
@@ -77,7 +90,7 @@ rules:
     omitStages:
       - "RequestReceived"
 ```
-### step 2
+### step 2 设置log后端参考文件 [kube-apiserver.yaml](../host_configs/kube-apiserver-log.yaml ':include :type=code')
 `vi /etc/kubernetes/manifests/kube-apiserver.yaml   # 修改apiserver的pod配置文件`
 
 ```
@@ -109,5 +122,16 @@ rules:
     name: audit-log
 ```
 
-### step 3
 `cat /var/log/pods.audit    #修改完后自动生效, 查看日志文件, 如果没有, 执行debug_kubelet.sh查看原因`
+
+### step 3 设置webhook后端参考文件 [kube-apiserver-webhook.yaml](../host_configs/kube-apiserver-webhook.yaml ':include :type=code')
+```
+    - --audit-policy-file=/etc/kubernetes/pki/audit-policy.yaml
+    - --audit-webhook-config-file=/etc/kubernetes/pki/audit-webhook.yaml
+```
+
+
+
+### 自动化部署脚本:
+[enable_audit_log.sh](../setup/enable_audit_log.sh)
+[enable_audit_webhook.sh](../setup/enable_audit_webhook.sh)
