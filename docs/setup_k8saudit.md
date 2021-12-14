@@ -1,5 +1,5 @@
 ## enable apiserver
-使能k8s audit log作为falco的事件源，具体操作见https://kubernetes.io/docs/tasks/debug-application-cluster/audit/的Log backend部分
+使能k8s audit log作为falco的事件源，具体操作见https://kubernetes.io/docs/tasks/debug-application-cluster/audit/ 的Log backend部分
 
 自动化脚本:
 $K8S_SCRIPTS_DIR/setup/enable_audit.sh
