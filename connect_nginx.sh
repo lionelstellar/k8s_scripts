@@ -1,2 +1,2 @@
 #!/bin/bash
-kubectl exec -it nginx -- /bin/sh
+sudo kubectl exec -it nginx -- /bin/sh

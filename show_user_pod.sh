@@ -1,2 +1,2 @@
 #!/bin/bash
-kubectl get pod -n default -o wide
+sudo kubectl get pod -n default -o wide

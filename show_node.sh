@@ -1,2 +1,2 @@
 #!/bin/bash
-kubectl get node
+sudo kubectl get node

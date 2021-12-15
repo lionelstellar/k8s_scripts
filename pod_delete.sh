@@ -1,2 +1,2 @@
 #!/bin/bash
-kubectl delete pod $1
+sudo kubectl delete pod $1

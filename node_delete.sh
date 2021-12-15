@@ -1,2 +1,2 @@
 #!/bin/bash
-kubectl delete nodes $1
+sudo kubectl delete nodes $1

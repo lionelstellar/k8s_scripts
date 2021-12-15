@@ -1,2 +1,2 @@
 #!/bin/bash
-kubectl logs -l app=falco -f
+sudo kubectl logs -l app=falco -f
