@@ -8,7 +8,7 @@ done < $K8S_SCRIPTS_DIR/config/config
 worker_ip=${MASTER_IP_LIST[0]}
 echo "[*] worker ip is"$worker_ip
 
-kubectl apply -f $K8S_SCRIPTS_DIR/host_configs/kube-flannel.yml
+sudo kubectl apply -f $K8S_SCRIPTS_DIR/host_configs/kube-flannel.yml
 
 # 把master的配置拷贝到worker
 mkdir -p /etc/cni/net.d/ 

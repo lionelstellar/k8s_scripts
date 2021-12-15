@@ -10,13 +10,13 @@ echo "[*] master ip is"$master_ip
 
 rm $HOME/.kube/config
 
-kubeadm init --pod-network-cidr=$LAN --kubernetes-version=$K8S_VERSION --apiserver-advertise-address=$master_ip
+sudo kubeadm init --pod-network-cidr=$LAN --kubernetes-version=$K8S_VERSION --apiserver-advertise-address=$master_ip
 
 mkdir -p $HOME/.kube
 sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
 sudo chown $(id -u):$(id -g) $HOME/.kube/config
 
-kubectl apply -f $K8S_SCRIPTS_DIR/host_configs/kube-flannel.yml
+sudo kubectl apply -f $K8S_SCRIPTS_DIR/host_configs/kube-flannel.yml
 
 # 生成不过期的token
-kubeadm token create --ttl 0 --print-join-command > $K8S_SCRIPTS_DIR/token
+sudo kubeadm token create --ttl 0 --print-join-command > $K8S_SCRIPTS_DIR/token

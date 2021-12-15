@@ -3,4 +3,4 @@ if [ -d $HOME/.kube ]; then
     rm -rf $HOME/.kube
 fi
    
-kubeadm reset
+sudo kubeadm reset
