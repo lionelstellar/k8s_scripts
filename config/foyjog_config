@@ -1,0 +1,14 @@
+# project info
+K8S_SCRIPTS_DIR=/home/foyjog/jyk/k8s_scripts
+
+# network
+LAN=192.168.0.0/16
+
+# k8s version
+K8S_VERSION=v1.22.1
+
+# node info
+MASTER_NUM=1
+WORKER_NUM=1
+MASTER_IP_LIST=(192.168.122.41)
+WORKER_IP_LIST=(192.168.122.50)
