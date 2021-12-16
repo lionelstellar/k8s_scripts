@@ -1,3 +1,3 @@
 #!/bin/bash
 
-sudo cat /var/log/pod.audit | wc -l
+sudo cat /var/log/pods.audit | wc -l
