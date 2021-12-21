@@ -38,9 +38,14 @@ func main() {
 			// if isConfigMap(event) {
 			// 	fmt.Printf("ConfigMap event detected: \n%+v\n", event)
 			// }
-			if isSecretList(event) {
-				fmt.Printf("list secret event detected: \n%+v\n", event)
+			// if isSecretList(event) {
+			// 	fmt.Printf("list secret event detected: \n%+v\n", event)
+			// }
+
+			if isCronjobChange(event) {
+				fmt.Printf("cronjob change event detected: \n%+v\n", event)
 			}
+
 			// fmt.Printf("Event detected: %+v\n\n", event)
 
 		}
@@ -80,4 +85,11 @@ func isSecretList(event v1.Event) bool {
 	return event.Verb == "list" &&
 		event.ObjectRef != nil &&
 		event.ObjectRef.Resource == "secrets"
+}
+
+// isPodCreation returns true if the given event is of a pod creation
+func isCronjobChange(event v1.Event) bool {
+	return event.Verb == "patch" &&
+		event.ObjectRef != nil &&
+		event.ObjectRef.Resource == "cronjobs"
 }
