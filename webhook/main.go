@@ -42,8 +42,12 @@ func main() {
 			// 	fmt.Printf("list secret event detected: \n%+v\n", event)
 			// }
 
-			if isCronjobChange(event) {
-				fmt.Printf("cronjob change event detected: \n%+v\n", event)
+			// if isCronjobChange(event) {
+			// 	fmt.Printf("cronjob change event detected: \n%+v\n", event)
+			// }
+
+			if isPodEvent(event) {
+				fmt.Printf("pod event detected: \n%+v\n", event)
 			}
 
 			// fmt.Printf("Event detected: %+v\n\n", event)
@@ -69,6 +73,12 @@ func isPodCreation(event v1.Event) bool {
 func isPodDelete(event v1.Event) bool {
 	return event.Verb == "delete" &&
 		event.Stage == v1.StageResponseComplete &&
+		event.ObjectRef != nil &&
+		event.ObjectRef.Resource == "pods"
+}
+
+func isPodEvent(event v1.Event) bool {
+	return event.Stage == v1.StageResponseComplete &&
 		event.ObjectRef != nil &&
 		event.ObjectRef.Resource == "pods"
 }

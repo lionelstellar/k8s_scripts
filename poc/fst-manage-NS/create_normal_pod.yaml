@@ -4,10 +4,10 @@ metadata:
   name: fst
   namespace: fst-manage	#指定命名空间
   labels:
-    name: normal_management_pod
+    name: fst
 spec:
   containers:
-  - name: mypod
+  - name: fst
     image: ubuntu:latest
 
 
