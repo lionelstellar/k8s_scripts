@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: fst
+  namespace: fst-manage	#指定命名空间
+  labels:
+    name: normal_management_pod
+spec:
+  containers:
+  - name: mypod
+    image: ubuntu:latest
+
+
