@@ -27,10 +27,22 @@ func main() {
 		}
 		// Iterate and filter audit events
 		for _, event := range events.Items {
-			if isPodCreation(event) {
-				fmt.Printf("Pod creation event detected: %+v\n", event)
+			// if isPodCreation(event) {
+			// 	fmt.Printf("Pod creation event detected: \n%+v\n", event)
+			// }
+
+			// if isPodDelete(event) {
+			// 	fmt.Printf("Pod delete event detected: \n%+v\n", event)
+			// }
+
+			// if isConfigMap(event) {
+			// 	fmt.Printf("ConfigMap event detected: \n%+v\n", event)
+			// }
+			if isSecretList(event) {
+				fmt.Printf("list secret event detected: \n%+v\n", event)
 			}
-			fmt.Printf("Event detected: %+v\n", event)
+			// fmt.Printf("Event detected: %+v\n\n", event)
+
 		}
 	})
 
@@ -46,4 +58,26 @@ func isPodCreation(event v1.Event) bool {
 		event.Stage == v1.StageResponseComplete &&
 		event.ObjectRef != nil &&
 		event.ObjectRef.Resource == "pods"
+}
+
+// isPodCreation returns true if the given event is of a pod creation
+func isPodDelete(event v1.Event) bool {
+	return event.Verb == "delete" &&
+		event.Stage == v1.StageResponseComplete &&
+		event.ObjectRef != nil &&
+		event.ObjectRef.Resource == "pods"
+}
+
+// isPodCreation returns true if the given event is of a pod creation
+func isConfigMap(event v1.Event) bool {
+	return event.Verb != "watch" &&
+		event.ObjectRef != nil &&
+		event.ObjectRef.Resource == "configmaps"
+}
+
+// isPodCreation returns true if the given event is of a pod creation
+func isSecretList(event v1.Event) bool {
+	return event.Verb != "list" &&
+		event.ObjectRef != nil &&
+		event.ObjectRef.Resource == "secrets"
 }
