@@ -77,7 +77,7 @@ func isConfigMap(event v1.Event) bool {
 
 // isPodCreation returns true if the given event is of a pod creation
 func isSecretList(event v1.Event) bool {
-	return event.Verb != "list" &&
+	return event.Verb == "list" &&
 		event.ObjectRef != nil &&
 		event.ObjectRef.Resource == "secrets"
 }
