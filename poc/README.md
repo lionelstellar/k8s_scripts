@@ -1,5 +1,7 @@
 # Kubernetes异常行为
 
+poc目录下用于模拟异常行为以产生k8s audit event,由此归纳所需的日志信息以及判定规则。
+
 ## 1.集群管理组件实例变更
 解释：cluster中重要的组件常常会放在kube-system(NAMESPACE)下面，etcd、coredns、apiserver等集群管理组件一般不会发生变更。
 ```
@@ -22,19 +24,16 @@ event.ObjectRef.Namespace == "kube-system" (或者为定制化的NS)
 event.Verb == "create" or event.Verb == "delete"
 ```
 
-## 2. ConfigMap变更
+## 2. ConfigMap变更导致配置被篡改
+ConfigMap是用于保存配置数据的键值对，可以用来保存单个属性，也可以保存配置文件，从而提高镜像的可移植性和可复用性。  
+pod仅在创建时加载一次ConfigMap中的值，运行时修改cm不影响pod。
 
 
-## ConfigMap与Secret
-让镜像与配置文件解耦，提高镜像的可移植性和可复用性。
+判定：
+```
+event.ObjectRef.Resource == "configmaps"
+event.ObjectRef.Name == $NAME   #要监控的cm名
+event.Verb == "create" or event.Verb == "delete" or event.Verb == "patch"   #分别对应创建、删除、更新
+```
 
-### configmap创建
-* 通过文件或目录创建
-`kubectl create configmap my-config --from-file=key1=test1.txt --from-file=key2=test2.txt` or
-`kubectl create configmap dir-config --from-file=config/`
-* 通过文本创建
-`kubectl create configmap literal-config --from-literal=key1=hello --from-literal=key2=world`
-* 通过yaml文件创建
-`kubectl create -f config.yaml`
-
-pod仅在创建时加载一次configmap中的值，运行时修改cm不影响pod
+## 3. 集群凭证批量查询(Secret List)
