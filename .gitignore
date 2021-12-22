@@ -3,4 +3,5 @@ falco/*
 pod/*
 debug/*
 falco-security-workshop
+.vscode/*
 
