@@ -24,9 +24,9 @@ event.ObjectRef.Namespace == "kube-system" (或者为定制化的NS)
 event.Verb == "create" or event.Verb == "delete"
 ```
 
-## 2. ConfigMap变更导致配置被篡改
+## 2. 集群配置被篡改([ConfigMap](../docs/k8s_features/configmap.md ':include :type=code')变更导致)
 ConfigMap是用于保存配置数据的键值对，可以用来保存单个属性，也可以保存配置文件，从而提高镜像的可移植性和可复用性。  
-pod仅在创建时加载一次ConfigMap中的值，运行时修改cm不影响pod。
+pod仅在创建时加载一次ConfigMap中的值，运行时修改cm不影响pod。  
 
 
 判定：
@@ -36,7 +36,22 @@ event.ObjectRef.Name == $NAME   #要监控的cm名
 event.Verb == "create" or event.Verb == "delete" or event.Verb == "patch"   #分别对应创建、删除、更新
 ```
 
-## 3. 集群凭证批量查询(Secret List)
+## 3. 集群凭证批量查询([Secret](../docs/k8s_features/secret.md ':include :type=code') List)
+对于非敏感数据，均可使用明文存储的configMap来做，若涉及到密码，私钥等数据时，则要使用secret类型.
+* generic: 通用类型，通常用于存储密码数据。  
+* tls：此类型仅用于存储私钥和证书。  
+* docker-registry: 若要保存docker仓库的认证信息的话，就必须使用此种类型来创建。  
 
+判定：
+```
+event.ObjectRef.Resource == "secrets" &&
+event.Verb == "list"
+```
 
-## 4. 集群定时任务(Secret List)
+## 4. 集群定时任务变更([Cronjob](../docs/k8s_features/cronjob.md ':include :type=code')变更)
+
+判定：
+```
+event.ObjectRef.Resource == "cronjobs" &&
+event.Verb == "patch"	
+```

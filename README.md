@@ -17,4 +17,4 @@
 
 [5.使能webhook](webhook/README.md ':include :type=code')
 
-[6.k8s行为](poc/README.md ':include :type=code')
+[6.k8s异常行为PoC](poc/README.md ':include :type=code')
