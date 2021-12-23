@@ -6,6 +6,7 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+	"strings"
 
 	v1 "k8s.io/apiserver/pkg/apis/audit/v1"
 )
@@ -46,8 +47,9 @@ func main() {
 			// 	fmt.Printf("cronjob change event detected: \n%+v\n", event)
 			// }
 
-			if isPodEvent(event) {
-				fmt.Printf("pod event detected: \n%+v\n", event)
+			if test(event) {
+				fmt.Printf("cm event detected: \n%+v\n", event)
+				fmt.Printf("verb: %s\n\n", event.Verb)
 			}
 
 			// fmt.Printf("Event detected: %+v\n\n", event)
@@ -102,4 +104,10 @@ func isCronjobChange(event v1.Event) bool {
 	return event.Verb == "patch" &&
 		event.ObjectRef != nil &&
 		event.ObjectRef.Resource == "cronjobs"
+}
+
+func test(event v1.Event) bool {
+	return strings.Split(event.UserAgent, "/")[0] == "kubectl" &&
+		event.ObjectRef != nil &&
+		event.ObjectRef.Resource == "serviceaccounts"
 }

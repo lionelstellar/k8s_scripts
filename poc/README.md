@@ -33,7 +33,8 @@ pod仅在创建时加载一次ConfigMap中的值，运行时修改cm不影响pod
 ```
 event.ObjectRef.Resource == "configmaps"
 event.ObjectRef.Name == $NAME   #要监控的cm名
-event.Verb == "create" or event.Verb == "delete" or event.Verb == "patch"   #分别对应创建、删除、更新
+event.Verb == "create" or event.Verb == "delete" or event.Verb == "patch" \
+or event.Verb == "update"  #分别对应创建、删除、更新
 ```
 
 ## 3. 集群凭证批量查询([Secret](../docs/k8s_features/secret.md ':include :type=code') List)
@@ -55,3 +56,21 @@ event.Verb == "list"
 event.ObjectRef.Resource == "cronjobs" &&
 event.Verb == "patch"	
 ```
+
+## 5. 集群高权限凭证变更
+Service Account
+Role
+clusterRole
+roleBinding
+clusterRoleBinding
+
+### 1. Service Account
+判定：
+```
+strings.Split(event.UserAgent, "/")[0] == "kubectl" &&
+event.ObjectRef.Resource == "cronjobs" &&
+event.Verb == "create" or event.Verb == "delete" or event.Verb == "update" \
+or event.Verb == "list"  or event.Verb == "list" #分别对应创建、删除、更新、列举、读取
+```
+
+## 6. 集群准入控制器变更
