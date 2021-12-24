@@ -73,4 +73,6 @@ event.Verb == "create" or event.Verb == "delete" or event.Verb == "update" \
 or event.Verb == "list"  or event.Verb == "list" #分别对应创建、删除、更新、列举、读取
 ```
 
+### 2. Role
+
 ## 6. 集群准入控制器变更
