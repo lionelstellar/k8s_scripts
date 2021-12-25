@@ -57,12 +57,8 @@ event.ObjectRef.Resource == "cronjobs" &&
 event.Verb == "patch"	
 ```
 
-## 5. 集群高权限凭证变更
-Service Account
-Role
-clusterRole
-roleBinding
-clusterRoleBinding
+## 5. 集群高权限凭证变更([Service Account/Role/ClusterRole/RoleBinding/ClusterRoleBinding](../docs/k8s_features/RBAC.md ':include :type=code') CRUD事件)
+
 
 ### 1. Service Account
 判定：
