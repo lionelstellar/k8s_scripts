@@ -59,16 +59,59 @@ event.Verb == "patch"
 
 ## 5. 集群高权限凭证变更([Service Account/Role/ClusterRole/RoleBinding/ClusterRoleBinding](../docs/k8s_features/RBAC.md ':include :type=code') CRUD事件)
 
+* 修改：
+`kubectl replace -f xxx.yaml`对应`verb:update` 
+`kubectl apply -f xxx.yaml`对应`verb:patch`   
+* 很多CRUD动作会伴随着get、list动作
 
-### 1. Service Account
+### 5.1 Service Account
 判定：
 ```
 strings.Split(event.UserAgent, "/")[0] == "kubectl" &&
-event.ObjectRef.Resource == "cronjobs" &&
+event.ObjectRef.Resource == "serviceaccounts" &&
 event.Verb == "create" or event.Verb == "delete" or event.Verb == "update" \
-or event.Verb == "list"  or event.Verb == "list" #分别对应创建、删除、更新、列举、读取
+or event.Verb == "list"  or event.Verb == "get" #分别对应创建、删除、更新、列举、读取
 ```
 
-### 2. Role
+### 5.2 Role
+判定：
+```
+strings.Split(event.UserAgent, "/")[0] == "kubectl" &&
+event.ObjectRef.Resource == "roles" &&
+event.Verb == "create" or event.Verb == "delete" or event.Verb == "update" \
+or event.Verb == "patch" or event.Verb == "list"  or event.Verb == "get" #分别对应创建、删除、更新、列举、读取
+```
+
+### 5.3 ClusterRole
+判定：
+```
+strings.Split(event.UserAgent, "/")[0] == "kubectl" &&
+event.ObjectRef.Resource == "clusterroles" &&
+event.Verb == "create" or event.Verb == "delete" or event.Verb == "update" \
+or event.Verb == "patch" or event.Verb == "list"  or event.Verb == "get" #分别对应创建、删除、更新、列举、读取
+```
+
+### 5.4 RoleBinding
+判定：
+```
+strings.Split(event.UserAgent, "/")[0] == "kubectl" &&
+event.ObjectRef.Resource == "rolebindings" &&
+event.Verb == "create" or event.Verb == "delete" or event.Verb == "update" \
+or event.Verb == "patch" or event.Verb == "list"  or event.Verb == "get" #分别对应创建、删除、更新、列举、读取
+```
+
+### 5.5 ClusterRoleBinding
+判定：
+```
+strings.Split(event.UserAgent, "/")[0] == "kubectl" &&
+event.ObjectRef.Resource == "clusterrolebindings" &&
+event.Verb == "create" or event.Verb == "delete" or event.Verb == "update" \
+or event.Verb == "patch" or event.Verb == "list"  or event.Verb == "get" #分别对应创建、删除、更新、列举、读取
+```
 
 ## 6. 集群准入控制器变更
+
+
+
+
+## 7. 集群准入控制器变更

@@ -1,2 +1,2 @@
 #!/bin/bash
-kubectl apply -f role_binding.yaml
+kubectl apply -f cluster_role_binding.yaml

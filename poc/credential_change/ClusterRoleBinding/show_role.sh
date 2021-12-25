@@ -1,3 +1,3 @@
 #!/bin/bash
 
-kubectl get roles --all-namespaces
+kubectl get clusterrolebindings --all-namespaces

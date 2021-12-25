@@ -7,7 +7,7 @@ metadata:
 subjects:
 # 你可以指定不止一个“subject（主体）”
 - kind: User
-  name: alice # "name" 是区分大小写的
+  name: bob # "name" 是区分大小写的
   apiGroup: rbac.authorization.k8s.io
 roleRef:
   # "roleRef" 指定与某 Role 或 ClusterRole 的绑定关系

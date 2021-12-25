@@ -1,2 +1,2 @@
 #!/bin/bash
-kubectl delete rolebindings -n kube-system my-role
+kubectl delete clusterrolebindings read-secrets-global

@@ -48,7 +48,7 @@ func main() {
 			// }
 
 			if test(event) {
-				fmt.Printf("cm event detected: \n%+v\n", event)
+				fmt.Printf("event detected: \n%+v\n", event)
 				fmt.Printf("verb: %s\n\n", event.Verb)
 			}
 
@@ -109,5 +109,5 @@ func isCronjobChange(event v1.Event) bool {
 func test(event v1.Event) bool {
 	return strings.Split(event.UserAgent, "/")[0] == "kubectl" &&
 		event.ObjectRef != nil &&
-		event.ObjectRef.Resource == "serviceaccounts"
+		event.ObjectRef.Resource == "clusterrolebindings"
 }
