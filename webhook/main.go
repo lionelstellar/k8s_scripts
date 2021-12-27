@@ -51,8 +51,11 @@ func main() {
 				fmt.Printf("event detected: \n%+v\n", event)
 				fmt.Printf("verb: %s\n\n", event.Verb)
 			}
-
-			// fmt.Printf("Event detected: %+v\n\n", event)
+			// if event.Verb == "delete" {
+			// 	fmt.Printf("Event detected: %+v\n\n", event)
+			// 	//fmt.Print("Src", event.SourceIPs)
+			// 	fmt.Printf("\n\n")
+			// }
 
 		}
 	})
@@ -109,5 +112,10 @@ func isCronjobChange(event v1.Event) bool {
 func test(event v1.Event) bool {
 	return strings.Split(event.UserAgent, "/")[0] == "kubectl" &&
 		event.ObjectRef != nil &&
-		event.ObjectRef.Resource == "clusterrolebindings"
+		event.ObjectRef.Resource == "podsecuritypolicies"
+}
+
+func isUnauthenticated(event v1.Event) bool {
+	return event.User.Groups != nil &&
+		event.User.Groups[0] == "system:unauthenticated"
 }

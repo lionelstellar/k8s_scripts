@@ -110,8 +110,20 @@ or event.Verb == "patch" or event.Verb == "list"  or event.Verb == "get" #分别
 ```
 
 ## 6. 集群准入控制器变更
+### 6.1 PodSecurityPolicy准入控制器
+https://kubernetes.io/zh/docs/concepts/policy/pod-security-policy/  
+判定：
+```
+strings.Split(event.UserAgent, "/")[0] == "kubectl" &&
+event.ObjectRef.Resource == "podsecuritypolicies" &&
+event.Verb == "create" or event.Verb == "delete" or event.Verb == "update" \
+or event.Verb == "patch"  #分别对应创建、删除、更新
+```
+
+### 6.2 其他类型的准入控制器
 
 
+## 7. 集群管理组件被业务容器直接访问
+api-server被业务容器直接访问
 
-
-## 7. 集群准入控制器变更
+## 8. 集群管理组件被异常连接
