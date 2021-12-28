@@ -47,15 +47,16 @@ func main() {
 			// 	fmt.Printf("cronjob change event detected: \n%+v\n", event)
 			// }
 
-			if test(event) {
-				fmt.Printf("event detected: \n%+v\n", event)
-				fmt.Printf("verb: %s\n\n", event.Verb)
-			}
-			// if event.Verb == "delete" {
-			// 	fmt.Printf("Event detected: %+v\n\n", event)
-			// 	//fmt.Print("Src", event.SourceIPs)
-			// 	fmt.Printf("\n\n")
+			// if test(event) {
+			// 	fmt.Printf("event detected: \n%+v\n", event)
+			// 	fmt.Printf("verb: %s\n\n", event.Verb)
 			// }
+			// event.Verb == "delete"
+			if true {
+				fmt.Printf("Event detected: %+v\n\n", event)
+				fmt.Print("Src", event.SourceIPs)
+				fmt.Printf("\n\n")
+			}
 
 		}
 	})

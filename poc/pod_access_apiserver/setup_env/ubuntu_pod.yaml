@@ -15,7 +15,7 @@ spec:
    #容器名称
    - name: myubuntu
      #容器对应的Docker Image
-     image: ubuntu:18.04
+     image: 172.16.238.136:5000/ubuntu:k8s_test
      command: [ "/bin/bash", "-c", "--" ]
      args: [ "while true; do sleep 3600; done;" ]
      volumeMounts:
