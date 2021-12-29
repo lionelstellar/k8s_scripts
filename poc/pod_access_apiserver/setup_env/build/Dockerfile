@@ -15,3 +15,6 @@ RUN apt-get install -y net-tools
 
 RUN apt-get install -y python3-pip
 RUN pip3 install requests
+
+WORKDIR /home
+COPY curl/* ./

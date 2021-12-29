@@ -52,7 +52,7 @@ func main() {
 			// 	fmt.Printf("verb: %s\n\n", event.Verb)
 			// }
 			// event.Verb == "delete"
-			if true {
+			if event.UserAgent == "curl/7.68.0" {
 				fmt.Printf("Event detected: %+v\n\n", event)
 				fmt.Print("Src", event.SourceIPs)
 				fmt.Printf("\n\n")
