@@ -133,3 +133,11 @@ or event.Verb == "patch"  #分别对应创建、删除、更新
 
 
 ## 8. 集群管理组件被异常连接
+
+
+
+
+
+## 其他参考
+[falco](https://www.bookstack.cn/read/k8s-1.18-tasks/85d181983226f3da.md ':include :type=code')
+

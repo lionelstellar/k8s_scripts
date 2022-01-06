@@ -13,6 +13,35 @@ API-SERVER 的核心功能是提供了对Kubernetes各类资源对象(如Pod、S
 在安全模式下，API-SERVER有三种级别的客户端认证方式
 * HTTPS证书认证：基于CA根证书签名的双向数字证书认证方式
 * HTTP Token认证：通过一个Token来识别合法用户（较常使用）
-* HTTP Base认证：通过用户名+密码的认证方式
+* HTTP Base认证：通过用户名+密码的认证方式(测试场景，生产环境不建议用)
 
 ### 1.证书认证
+证书的CN字段为USER，O字段为GROUP，通讯用到的所有证书都由集群根CA来签发  
+查看命令：
+```openssl x509 -in /etc/kubernetes/pki/apiserver-kubelet-client.crt -text -noout | grep CN```  
+
+CA证书`/etc/kubernetes/pki/ca.crt`  
+客户端证书`/etc/kubernetes/pki/apiserver-kubelet-client.crt`  
+客户端私钥`/etc/kubernetes/pki/apiserver-kubelet-client.key`  
+
+```
+带CA证书
+curl https://172.16.238.136:6443/api/v1/namespaces/default/pods \
+    -vvvvv \
+    --cacert ca.crt \
+    --cert apiserver-kubelet-client.crt \
+    --key apiserver-kubelet-client.key 
+
+或免带CA证书
+带CA证书
+curl https://172.16.238.136:6443/api/v1/namespaces/default/pods \
+    -vvvvv \
+    -k \
+    --cert apiserver-kubelet-client.crt \
+    --key apiserver-kubelet-client.key 
+```
+
+### 2.Token认证
+
+ref：https://blog.csdn.net/qq_34556414/article/details/115259731
+
