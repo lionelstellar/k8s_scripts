@@ -6,3 +6,4 @@ falco-security-workshop
 .vscode/*
 *.crt
 *.key
+poc/pod_access_apiserver/setup_env/build/curl/curl_with_token.sh
