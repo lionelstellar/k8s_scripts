@@ -12,6 +12,11 @@ import (
 )
 
 func main() {
+	node_ip := []string{"172.16.238.138", "172.16.238.136"}
+	control_plane := []string{"kubelet", "kube-scheduler", "kube-probe",
+		"kube-proxy", "kube-scheduler", "kube-apiserver", "coredns",
+		"kube-controller-manager", "kubectl", "flanneld"}
+
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		defer r.Body.Close()
 		body, err := ioutil.ReadAll(r.Body)
@@ -54,17 +59,20 @@ func main() {
 			// event.Verb == "delete"
 
 			// capture curl event
-			if strings.Contains(event.UserAgent, "curl") {
-				fmt.Printf("Event detected: %+v\n\n", event)
-				fmt.Print("Src", event.SourceIPs)
+			// if strings.Contains(event.UserAgent, "curl") {
+			if podAccessApiServer(event, control_plane, node_ip) {
+				fmt.Printf("pod Access ApiServer Event detected:\n %+v\n\n", event)
+				fmt.Print("Src:", event.SourceIPs[0])
+				// fmt.Print("code:", event.ResponseStatus.Code)
+				fmt.Print("UserAgent: ", event.UserAgent)
 				fmt.Printf("\n\n")
 			}
 
-			if event.ResponseStatus.Code != 200 {
-				fmt.Printf("Event detected: %+v\n\n", event)
-				fmt.Print("Src", event.SourceIPs)
-				fmt.Printf("\n\n")
-			}
+			// if isUnauthenticated(event) || isUnauthorized(event) {
+			// 	fmt.Printf("Unauthenticated or Unauthorized Event detected: %+v\n\n", event)
+			// 	fmt.Print("Src", event.SourceIPs)
+			// 	fmt.Printf("\n\n")
+			// }
 
 		}
 	})
@@ -125,6 +133,41 @@ func test(event v1.Event) bool {
 }
 
 func isUnauthenticated(event v1.Event) bool {
-	return event.User.Groups != nil &&
-		event.User.Groups[0] == "system:unauthenticated"
+	return event.ResponseStatus.Code == 401
+}
+
+func isUnauthorized(event v1.Event) bool {
+	return event.ResponseStatus.Code == 403
+}
+
+func isSysUserAgent(event v1.Event, sys_agent_array []string) bool {
+	return contains_in(event.UserAgent, sys_agent_array)
+}
+
+func isClusterIP(event v1.Event, cluster_ip_array []string) bool {
+	return in(event.SourceIPs[0], cluster_ip_array)
+}
+
+func podAccessApiServer(event v1.Event, sys_agent_array []string, cluster_ip_array []string) bool {
+	return isClusterIP(event, cluster_ip_array) && (!isSysUserAgent(event, sys_agent_array))
+}
+
+// return true if target in str_array
+func in(target string, str_array []string) bool {
+	for _, element := range str_array {
+		if target == element {
+			return true
+		}
+	}
+	return false
+}
+
+// return true if target contains any elem of int the str_array
+func contains_in(target string, str_array []string) bool {
+	for _, element := range str_array {
+		if strings.Contains(target, element) {
+			return true
+		}
+	}
+	return false
 }

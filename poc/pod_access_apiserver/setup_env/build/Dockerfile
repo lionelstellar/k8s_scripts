@@ -16,7 +16,8 @@ RUN apt-get install -y net-tools
 RUN apt-get install -y python3-pip
 RUN pip3 install requests
 
-COPY curl/apiserver-kubelet-client.crt /home
-COPY curl/apiserver-kubelet-client.key /home
-COPY curl/ca.crt /home
-COPY curl/curl.sh /home
+# COPY curl/apiserver-kubelet-client.crt /home
+# COPY curl/apiserver-kubelet-client.key /home
+# COPY curl/ca.crt /home
+# COPY curl/curl_with_cert.sh /home
+COPY curl/* /home/

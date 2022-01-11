@@ -128,11 +128,32 @@ or event.Verb == "patch"  #分别对应创建、删除、更新
 
 
 ## 7. 集群管理组件被业务容器直接访问
+一般业务容器中不存在kubelet, kube-scheduler, kube-probe, kube-scheduler, kube-apiserver, coredns等管理容器代理与apiserver交互
+```
+// 管理面UserAgent白名单
+!(
+    strings.Contains(event.UserAgent, "kubelet") ||
+	strings.Contains(event.UserAgent, "kube-scheduler") ||
+	strings.Contains(event.UserAgent, "kube-probe") ||
+	strings.Contains(event.UserAgent, "kube-proxy") ||
+	strings.Contains(event.UserAgent, "kube-scheduler") ||
+	strings.Contains(event.UserAgent, "kube-apiserver") ||
+	strings.Contains(event.UserAgent, "coredns") ||
+	strings.Contains(event.UserAgent, "kube-controller-manager") ||
+	strings.Contains(event.UserAgent, "kubectl") ||
+	strings.Contains(event.UserAgent, "flanneld")
+) && event.SourceIPs[0] in cluster_ip_array
+```
 
 
+## 8. [集群管理组件被异常连接](../docs/k8s_features/k8s_api.md ':include :type=code')
+```
+event.ResponseStatus.Code == 401    // 未认证
+&& event.ResponseStatus.Code == 403    // 未授权
 
-
-## 8. 集群管理组件被异常连接
+或者采用广泛的判断
+event.ResponseStatus.Code < 200 && event.ResponseStatus.Code >= 300
+```
 
 
 

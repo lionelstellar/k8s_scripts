@@ -42,6 +42,49 @@ curl https://172.16.238.136:6443/api/v1/namespaces/default/pods \
 ```
 
 ### 2.Token认证
+集群的ServiceAccount会关联一个secret，这个Secret中就包含了token，如果没有的话可以自己创建一个SA和secret并绑定起来，下面给出一个创建的示例。(https://blog.csdn.net/ANXIN997483092/article/details/92417109)
 
-ref：https://blog.csdn.net/qq_34556414/article/details/115259731
+创建SA：  
+```
+kubectl create serviceaccount api-explorer
+```
+
+创建ClusterRole,给与pod及其日志的get/watch/list权限：  
+```
+cat <<EOF | kubectl create -f -
+kind: ClusterRole
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: log-reader
+rules:
+- apiGroups: [""] 
+  resources: ["pods", "pods/log"]
+  verbs: ["get", "watch", "list"]
+EOF
+```
+
+将ClusterRole绑定到default命名空间中的ServiceAccount：  
+```
+kubectl create rolebinding api-explorer:log-reader --clusterrole log-reader --serviceaccount default:api-explorer
+```
+
+查询该SA的TOKEN与证书：  
+```
+SERVICE_ACCOUNT=api-explorer
+ 
+# Get the ServiceAccount's token Secret's name
+SECRET=$(kubectl get serviceaccount ${SERVICE_ACCOUNT} -o json | jq -Mr '.secrets[].name | select(contains("token"))')
+ 
+# Extract the Bearer token from the Secret and decode
+TOKEN=$(kubectl get secret ${SECRET} -o json | jq -Mr '.data.token' | base64 -d)
+ 
+# Extract, decode and write the ca.crt to a temporary location
+kubectl get secret ${SECRET} -o json | jq -Mr '.data["ca.crt"]' | base64 -d > /tmp/ca.crt
+ 
+# Get the API Server location
+APISERVER=https://$(kubectl -n default get endpoints kubernetes --no-headers | awk '{ print $2 }')
+```
+
+other ref：https://blog.csdn.net/qq_34556414/article/details/115259731
+
 
