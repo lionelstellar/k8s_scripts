@@ -20,7 +20,7 @@ kube-system   kube-scheduler-master            1/1     Running   58             
 判定：
 ```
 event.ObjectRef.Resource == "pods"
-event.ObjectRef.Namespace == "kube-system" (或者为定制化的NS)
+event.ObjectRef.Namespace == "kube-system" //或者为定制化的NS
 event.Verb == "create" or event.Verb == "delete"
 ```
 
@@ -32,9 +32,9 @@ pod仅在创建时加载一次ConfigMap中的值，运行时修改cm不影响pod
 判定：
 ```
 event.ObjectRef.Resource == "configmaps"
-event.ObjectRef.Name == $NAME   #要监控的cm名
+event.ObjectRef.Name == $NAME   //要监控的cm名
 event.Verb == "create" or event.Verb == "delete" or event.Verb == "patch" \
-or event.Verb == "update"  #分别对应创建、删除、更新
+or event.Verb == "update"  //分别对应创建、删除、更新
 ```
 
 ## 3. 集群凭证批量查询([Secret](../docs/k8s_features/secret.md ':include :type=code') List)
@@ -70,7 +70,7 @@ event.Verb == "patch"
 strings.Split(event.UserAgent, "/")[0] == "kubectl" &&
 event.ObjectRef.Resource == "serviceaccounts" &&
 event.Verb == "create" or event.Verb == "delete" or event.Verb == "update" \
-or event.Verb == "list"  or event.Verb == "get" #分别对应创建、删除、更新、列举、读取
+or event.Verb == "list"  or event.Verb == "get" //分别对应创建、删除、更新、列举、读取
 ```
 
 ### 5.2 Role
@@ -79,7 +79,7 @@ or event.Verb == "list"  or event.Verb == "get" #分别对应创建、删除、�
 strings.Split(event.UserAgent, "/")[0] == "kubectl" &&
 event.ObjectRef.Resource == "roles" &&
 event.Verb == "create" or event.Verb == "delete" or event.Verb == "update" \
-or event.Verb == "patch" or event.Verb == "list"  or event.Verb == "get" #分别对应创建、删除、更新、列举、读取
+or event.Verb == "patch" or event.Verb == "list"  or event.Verb == "get" //分别对应创建、删除、更新、列举、读取
 ```
 
 ### 5.3 ClusterRole
@@ -88,7 +88,7 @@ or event.Verb == "patch" or event.Verb == "list"  or event.Verb == "get" #分别
 strings.Split(event.UserAgent, "/")[0] == "kubectl" &&
 event.ObjectRef.Resource == "clusterroles" &&
 event.Verb == "create" or event.Verb == "delete" or event.Verb == "update" \
-or event.Verb == "patch" or event.Verb == "list"  or event.Verb == "get" #分别对应创建、删除、更新、列举、读取
+or event.Verb == "patch" or event.Verb == "list"  or event.Verb == "get" //分别对应创建、删除、更新、列举、读取
 ```
 
 ### 5.4 RoleBinding
@@ -97,7 +97,7 @@ or event.Verb == "patch" or event.Verb == "list"  or event.Verb == "get" #分别
 strings.Split(event.UserAgent, "/")[0] == "kubectl" &&
 event.ObjectRef.Resource == "rolebindings" &&
 event.Verb == "create" or event.Verb == "delete" or event.Verb == "update" \
-or event.Verb == "patch" or event.Verb == "list"  or event.Verb == "get" #分别对应创建、删除、更新、列举、读取
+or event.Verb == "patch" or event.Verb == "list"  or event.Verb == "get" //分别对应创建、删除、更新、列举、读取
 ```
 
 ### 5.5 ClusterRoleBinding
@@ -106,7 +106,7 @@ or event.Verb == "patch" or event.Verb == "list"  or event.Verb == "get" #分别
 strings.Split(event.UserAgent, "/")[0] == "kubectl" &&
 event.ObjectRef.Resource == "clusterrolebindings" &&
 event.Verb == "create" or event.Verb == "delete" or event.Verb == "update" \
-or event.Verb == "patch" or event.Verb == "list"  or event.Verb == "get" #分别对应创建、删除、更新、列举、读取
+or event.Verb == "patch" or event.Verb == "list"  or event.Verb == "get" //分别对应创建、删除、更新、列举、读取
 ```
 
 ## 6. 集群准入控制器变更
@@ -117,7 +117,7 @@ https://kubernetes.io/zh/docs/concepts/policy/pod-security-policy/
 strings.Split(event.UserAgent, "/")[0] == "kubectl" &&
 event.ObjectRef.Resource == "podsecuritypolicies" &&
 event.Verb == "create" or event.Verb == "delete" or event.Verb == "update" \
-or event.Verb == "patch"  #分别对应创建、删除、更新
+or event.Verb == "patch"  //分别对应创建、删除、更新
 ```
 
 ### 6.2 其他类型的准入控制器
@@ -128,9 +128,11 @@ or event.Verb == "patch"  #分别对应创建、删除、更新
 
 
 ## 7. 集群管理组件被业务容器直接访问
-一般业务容器中不存在kubelet, kube-scheduler, kube-probe, kube-scheduler, kube-apiserver, coredns等管理容器代理与apiserver交互
+一般业务容器中不存在kubelet, kube-scheduler, kube-probe, kube-scheduler, kube-apiserver, coredns等管理容器代理与apiserver交互, 且pod访问apiserver时日志中的sourceIP会标记为pod所处node上的IP  
 ```
-// 管理面UserAgent白名单
+// 管理面UserAgent白名单control_plane := []string{"kubelet", "kube-scheduler", "kube-probe",
+//		"kube-proxy", "kube-scheduler", "kube-apiserver", "coredns",
+//		"kube-controller-manager", "kubectl", "flanneld"}
 !(
     strings.Contains(event.UserAgent, "kubelet") ||
 	strings.Contains(event.UserAgent, "kube-scheduler") ||
