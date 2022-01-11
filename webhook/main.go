@@ -59,7 +59,6 @@ func main() {
 			// event.Verb == "delete"
 
 			// capture curl event
-			// if strings.Contains(event.UserAgent, "curl") {
 			if podAccessApiServer(event, control_plane, node_ip) {
 				fmt.Printf("pod Access ApiServer Event detected:\n %+v\n\n", event)
 				fmt.Print("Src:", event.SourceIPs[0])
@@ -68,6 +67,7 @@ func main() {
 				fmt.Printf("\n\n")
 			}
 
+			// abnormal connection
 			// if isUnauthenticated(event) || isUnauthorized(event) {
 			// 	fmt.Printf("Unauthenticated or Unauthorized Event detected: %+v\n\n", event)
 			// 	fmt.Print("Src", event.SourceIPs)
